@@ -168,17 +168,15 @@ export default class Player extends Mixins(PlayerMixin) {
     this.songError = false
   }
   error() {
+    !this.songError && this.autoJump(this.autoJumpTime * 1000)
     this.songReady = true
-    this.autoJump(this.autoJumpTime * 1000)
   }
-  autoJump(ms: number) {
-    // TODO:连续跳转bug
+  autoJump(ms: number) {   
     this.songError = true
     this.songReady = true
-    setTimeout(() => {
-      this.next()
-    }, ms)
+    setTimeout(this.next, ms)
   }
+  
   previous() {
     if (!this.songReady) return
     const index = this.currentIndex - 1 < 0 ? this.playlist.length - 1 : this.currentIndex - 1
@@ -317,7 +315,8 @@ export default class Player extends Mixins(PlayerMixin) {
       })
     }
     if (!newSong.url && this.playing) {
-      this.autoJump(this.autoJumpTime * 1000)
+      !this.songError && this.autoJump(this.autoJumpTime * 1000)
+      this.songError = true
       return
     }
     this.savePlayHistory(newSong)
@@ -349,7 +348,7 @@ export default class Player extends Mixins(PlayerMixin) {
 
 .player
   .back
-    position fixed
+    position absolute
     top 10px
     left 20px
     svg
@@ -357,7 +356,7 @@ export default class Player extends Mixins(PlayerMixin) {
       height @width
       fill $text-highlight-color
   .normal-player
-    position fixed
+    position absolute
     top 0
     left 0
     bottom 0
@@ -458,7 +457,7 @@ export default class Player extends Mixins(PlayerMixin) {
           height 20px
           fill $text-highlight-color
   .mini-player
-    position fixed
+    position absolute
     z-index $mini-player-zindex
     bottom 0px
     height 60px

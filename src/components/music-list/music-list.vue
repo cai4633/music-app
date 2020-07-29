@@ -125,10 +125,11 @@ $bg-after-zindex = 5
 
 .music-list
   position relative
-  width 100vw
-  height 100vh
+  height 100%
+  box-sizing border-box
+  overflow hidden
   h1
-    position fixed
+    position absolute
     top 10px
     left 55px
     right 40px
@@ -148,6 +149,10 @@ $bg-after-zindex = 5
       height 70vw
       color $text-color
       background-color #000
+      @media screen and (min-width 720px){
+        width 720px
+        height calc(720px * 0.4)
+      }
       .bg
         position relative
         transform-origin top center
@@ -188,7 +193,7 @@ $bg-after-zindex = 5
           font-size 12px
 
   .list
-    position fixed
+    position absolute
     top 70vw
     bottom 0
     left 0
@@ -197,7 +202,9 @@ $bg-after-zindex = 5
     z-index $list-zindex
     overflow visiable
     background-color $background-color
-
+    @media screen and (min-width 720px){
+      top calc(720px * 0.4)
+    }
   .bg-layer
     position relative
     height 100%
@@ -205,13 +212,13 @@ $bg-after-zindex = 5
     z-index $list-zindex
 
   div.icon-wrap
-    position fixed
+    position absolute
     z-index $icon-wrap-zindex
     top 8px
     left 15px
 
   .loading-wrap
-    position fixed
+    position absolute
     top 50%
     left 50%
     transform  translate3d(-50%,-50%,0)

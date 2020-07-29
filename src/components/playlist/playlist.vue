@@ -156,7 +156,7 @@ $padding-x = 20px
     transition all  0.4s
 
 .playlist
-  position fixed
+  position absolute
   top 0
   left 0
   right 0

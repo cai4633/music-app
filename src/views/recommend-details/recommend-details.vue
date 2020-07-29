@@ -49,13 +49,11 @@ export default class RecommendDetails extends Vue {
 </script>
 
 <style lang="stylus" scoped>
+@import '~common/stylus/variable.styl'
+@import '~common/stylus/mixin.styl'
 .recommend-details
-  position fixed
-  top 0
-  left 0
-  bottom 0
-  right 0
-  background-color #000
-  color #FFF
-  z-index 200
+  fixed-adapt()
+  background-color $background-color
+  color $text-color
+  z-index $recommend-detail-zindex 
 </style>

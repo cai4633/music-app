@@ -1,11 +1,6 @@
 <template>
   <div class="singer-details">
-    <music-list
-      :songs="songs"
-      ref="musicList"
-      :title="singer.name"
-      :bgImg="singer.avatar"
-    ></music-list>
+    <music-list :songs="songs" ref="musicList" :title="singer.name" :bgImg="singer.avatar" ></music-list>
   </div>
 </template>
 
@@ -63,13 +58,6 @@ export default class SingerDetails extends Vue {
 <style lang="stylus" scoped>
 @import '~common/stylus/variable.styl';
 
-.come-enter,.come-leave-to
-  transform translateX(-100%)
-.come-enter-to,.come-leave
-  transform translateX(0)
-.come-enter-active,.come-leave-active
-  transition all 0.5s
-
 .singer-details
   background-color $background-color
   position fixed
@@ -77,5 +65,9 @@ export default class SingerDetails extends Vue {
   bottom 0
   left 0
   right 0
-  z-index 2000
+  @media screen and (min-width: 720px) {
+    left calc(50% - 360px)
+    width 720px
+  }
+  z-index $singer-detail-zindex 
 </style>

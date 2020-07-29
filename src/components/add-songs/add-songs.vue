@@ -133,7 +133,7 @@ export default class AddSongs extends Mixins(SearchMixin) {
   transform translateX(100%)
 
 .add-songs
-  position fixed
+  position absolute
   top 0
   bottom 0
   right 0
@@ -158,7 +158,7 @@ export default class AddSongs extends Mixins(SearchMixin) {
     margin auto
     max-width 500px
   .search-result
-    position fixed
+    position absolute
     top 80px
     bottom 0px
     left 0

@@ -2,18 +2,14 @@
   <div class="slider">
     <div class="swiper-wrapper"><slot></slot></div>
     <div class="swiper-pagination"></div>
-    <!-- 
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
-        <div class="swiper-scrollbar"></div> -->
   </div>
 </template>
 
 <script lang="ts">
-import "swiper/js/swiper.js";
-import "swiper/css/swiper.min.css";
-import Swiper from "swiper";
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import "swiper/js/swiper.js"
+import "swiper/css/swiper.min.css"
+import Swiper from "swiper"
+import { Component, Prop, Vue, Watch } from "vue-property-decorator"
 
 @Component
 export default class Slider extends Vue {
@@ -40,7 +36,7 @@ export default class Slider extends Vue {
       scrollbar: {
         el: ".swiper-scrollbar"
       }
-    });
+    })
   }
 }
 </script>
@@ -53,6 +49,10 @@ export default class Slider extends Vue {
     position relative
     overflow hidden
     font-size 0px
+    @media screen and (min-width:720px) {
+      width 720px
+      height calc(720px / 2.5)
+    }
 </style>
 
 <style lang="stylus">

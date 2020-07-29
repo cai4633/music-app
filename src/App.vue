@@ -22,6 +22,8 @@ export default class App extends Vue {}
 </script>
 
 <style lang="stylus">
+@import '~common/stylus/mixin.styl';
+@import '~common/stylus/variable.styl';
 #app
     font-family Avenir, Helvetica, Arial, sans-serif
     -webkit-font-smoothing antialiased
@@ -29,7 +31,12 @@ export default class App extends Vue {}
     text-align center
     color #2c3e50
     height 100vh
+    box-sizing border-box
     display flex
     flex-direction column
     overflow hidden
+    position relative
+    max-width 720px
+    margin auto
+    background-color $background-color
 </style>

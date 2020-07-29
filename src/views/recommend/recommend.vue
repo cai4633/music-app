@@ -4,8 +4,8 @@
       <div>
         <div class="banner" v-if="slideList.length">
           <slider>
-            <div class="swiper-slide" v-for="(item, index) in slideList" :key="'slider' + index">
-              <a :href="item.linkUrl"><img @load="imgLoad" v-lazy="item.picUrl" alt="" /></a>
+            <div class="swiper-slide" v-for="item in slideList" :key="item.id">
+              <a :href="item.linkUrl" ><img @load="imgLoad" :src="item.picUrl" alt="" /></a> 
             </div>
           </slider>
         </div>
@@ -13,13 +13,15 @@
         <div class="descLists">
           <h2>热门歌单推荐</h2>
           <ul class="descLists-wrap">
-            <li v-for="(desc, index) in descList" :key="desc.contend_id" @click="selectItem(desc, index)">
+            <li v-for="(desc, index) in descList" :key="desc.contend_id" @click="selectItem(desc, index)" >
               <div class="desc-icon">
                 <img v-lazy="desc.cover" alt="desc-icon" width="60" height="60" />
               </div>
               <div class="text">
                 <h3 class="desc-name">{{ desc.title }}</h3>
-                <p class="listen-number">播放量：{{ getListenNum(desc.listen_num) }}万</p>
+                <p class="listen-number">
+                  播放量：{{ getListenNum(desc.listen_num) }}万
+                </p>
               </div>
             </li>
           </ul>
@@ -29,7 +31,9 @@
         </div>
       </div>
     </scroll>
-    <router-view></router-view>
+    <transition name="slide-in">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
@@ -45,26 +49,39 @@ import { Mutation } from "vuex-class"
 import { mapGetters, MutationMethod } from "vuex"
 
 @Component({
-  components: { Slider, Scroll, Loading },
+  components: { Slider, Scroll, Loading }
 })
-
 export default class Recommend extends Mixins(PlaylistMixin) {
   slideList = []
   descList = []
   timer = 0
+  $refs!: {
+    rank: Scroll
+    descLists: HTMLElement
+    recommend: Scroll
+    banner: HTMLElement
+  }
 
   @Mutation("SET_DISC") setDisc!: MutationMethod
-  
+
   created() {
     this.timer = window.setTimeout(() => {
       this.__getRecommend()
       this.__getDescLists()
     }, 20) //instead of nextTick(),浏览器刷新时间一般是17ms
   }
+  mounted() {
+    window.onresize = this.descListRefresh //resize 更新位置
+  }
   destroyed() {
     window.clearTimeout(this.timer)
   }
 
+  descListRefresh() {
+    if (this.$refs.banner) {
+      this.$refs.descLists.style.top = `${this.$refs.banner.offsetHeight}px`
+    }
+  }
   selectItem(item: any, index: string) {
     this.setDisc(item)
     this.$router.push({ path: `/recommend/${item.content_id}` })
@@ -72,8 +89,8 @@ export default class Recommend extends Mixins(PlaylistMixin) {
   handlePlaylist() {
     const BOTTOM = this.playlist.length ? 45 : 0
     if (this.$refs.recommend) {
-      ;(<Scroll>this.$refs.recommend).$el.style.bottom = `${BOTTOM}px`
-      ;(this.$refs.recommend as Scroll).refresh()
+      this.$refs.recommend.$el.style.bottom = `${BOTTOM}px`
+      this.$refs.recommend.refresh()
     }
   }
   __getRecommend() {
@@ -92,21 +109,19 @@ export default class Recommend extends Mixins(PlaylistMixin) {
     return (parseFloat(number) / 10000).toFixed(1)
   }
   imgLoad() {
-    ;(this.$refs.recommend as Scroll).refresh()
+    this.$refs.recommend.refresh()
   }
 }
 </script>
 
 <style lang="stylus" scoped>
-@import '../../common/stylus/variable.styl'
+@import '~common/stylus/variable.styl'
+@import '~common/stylus/mixin.styl';
 
 .recommend
-  overflow hidden
-  background-color #272727
-  position fixed
-  top 81px
-  bottom 0px
-  width 100%
+  content-position()
+  // 详情进入动画
+  slide-in()
 
   .recommend-wrap
     overflow hidden
@@ -191,9 +206,12 @@ export default class Recommend extends Mixins(PlaylistMixin) {
               overflow hidden
 
       .loading-wrap
-        position fixed
+        position absolute
         width 100%
         top 60%
         transform translateY(-50%)
         z-index 3
+        @media screen and (min-width 720px){
+          top 70%
+        }
 </style>

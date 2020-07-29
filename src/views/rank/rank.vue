@@ -2,19 +2,21 @@
   <scroll class="rank" ref="rank" :data="lists">
     <div class="rank-inner">
       <ul class="content-inner">
-        <li v-for="list in lists" @click="selectItem(list)" :key="'rank' + list.id">
-          <div class="topIcon"><img @load="imgLoad" v-lazy="list.picUrl" width="100" /></div>
+        <li v-for="list in lists" @click="selectItem(list)" :key="list.id" >
+          <div class="topIcon"> <img @load="imgLoad" v-lazy="list.picUrl" width="100" /> </div>
           <ul class="songlist">
-            <li v-for="(song, songIndex) in list.songList" :key="song.songname + ((Math.random() * 10000) | 0)">
+            <li v-for="(song, songIndex) in list.songList" :key="song.songname + ((Math.random() * 10000) | 0)" >
               <span>{{ songIndex + 1 }}</span>
-              <span class="txt">{{ song.songname }} - {{ song.singername }}</span>
+              <span class="txt" >{{ song.songname }} - {{ song.singername }}</span >
             </li>
           </ul>
         </li>
       </ul>
       <div class="loading-wrap" v-show="!lists.length"><loading></loading></div>
     </div>
-    <router-view></router-view>
+    <transition name="slide-in">
+      <router-view></router-view>
+    </transition>
   </scroll>
 </template>
 
@@ -29,7 +31,7 @@ import { Mutation, Getter } from "vuex-class"
 import Loading from "base/loading/loading.vue"
 
 @Component({
-  components: { Scroll, Loading },
+  components: { Scroll, Loading }
 })
 export default class Rank extends Mixins(PlaylistMixin) {
   lists: any[] = []
@@ -73,49 +75,49 @@ export default class Rank extends Mixins(PlaylistMixin) {
 @import '~common/stylus/variable.styl';
 @import '~common/stylus/mixin.styl';
 .rank
-  position fixed
-  top 81px
-  bottom 0
-  left 0
-  right 0
-  padding 20px 10px
-  background-color $background-color
+  content-position()
   color $text-color
-  overflow hidden
+  // 详情进入动画
+  slide-in()
+  background-color $background-color
   .loading-wrap
     position-center(fixed, x)
     top 45%
-  ul.content-inner
-    &>li
-      display flex
-      align-items  center
-      justify-content flex-start
-      padding-bottom 15px
-      div.topIcon
-        flex 0 0 auto
-        img
-          width 100px
-          vertical-align top
-
-      ul.songlist
+  .rank-inner
+    padding 0px 20px 0px 20px
+    ul.content-inner
+      &>li
         display flex
-        padding 0px 15px
-        box-sizing border-box
-        flex 1
-        text-align left
-        font-size 12px
-        flex-direction column
-        justify-content center
-        min-width 0px
-        li
-          white-space nowrap
-          text-align left
-          text-overflow ellipsis
-          overflow hidden
-          line-height 1.8
+        align-items  center
+        justify-content flex-start
+        margin-bottom 15px
+        background-color lighten($background-color, 10%)
 
-          span
-            box-sizing border-box
-            padding-right 5px
-            font-size 12px
+        div.topIcon
+          flex 0 0 auto
+          img
+            width 100px
+            vertical-align top
+
+        ul.songlist
+          display flex
+          padding 0px 15px
+          box-sizing border-box
+          flex 1
+          text-align left
+          font-size 12px
+          flex-direction column
+          justify-content center
+          min-width 0px
+          li
+            white-space nowrap
+            text-align left
+            text-overflow ellipsis
+            overflow hidden
+            line-height 1.8
+
+            span
+              box-sizing border-box
+              padding-right 5px
+              font-size 12px
 </style>
